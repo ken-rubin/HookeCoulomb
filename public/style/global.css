@@ -1,0 +1,118 @@
+@import url("colors.css");
+
+html {
+
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+body {
+
+    font: 12px Arial;
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    user-select: none;
+}
+
+::-webkit-scrollbar {
+
+    background: transparent;
+}
+::-webkit-scrollbar-button {
+
+    background:transparent;
+}
+::-webkit-scrollbar-thumb {
+
+    background: var(--scroll-bar-background);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-corner {
+
+    background: transparent;
+}
+
+#ContainerDiv {
+
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+
+    background: var(--main-background);
+    color: var(--main-color);
+}
+
+#HeaderDiv {
+
+    flex: 0 0 auto;
+    padding: 4px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.HeaderItem {
+
+    flex: 0 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding-right: 20px;
+}
+
+#LogoDiv {
+
+    background: url("../media/download.png") no-repeat;
+    background-size:contain;
+    width: 100px;
+    height: 56px;
+    margin: 8px;
+    border-radius: 4px;
+    border: 2px solid black;
+    box-shadow: 0px 0px 50px black;
+}
+
+#LogoDiv2 {
+
+    background: url("../media/coulombs-law.png") no-repeat;
+    background-size:contain;
+    width: 100px;
+    height: 48.69px;
+    margin: 8px;
+    border-radius: 4px;
+    border: 2px solid black;
+    box-shadow: 0px 0px 50px black;
+}
+
+#ContentDiv {
+
+    height: 10px;
+    flex: 1 0 auto;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#Canvas {
+
+    flex: 0 0 auto;
+
+    width: 640px;
+    height: 480px;
+}
+
+#ErrorDiv {
+
+    flex: 0 0 auto;
+    color: var(--error-color);
+}
+

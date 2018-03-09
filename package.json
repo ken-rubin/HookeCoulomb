@@ -1,0 +1,23 @@
+{
+  "name": "hookecoulomb",
+  "version": "1.0.0",
+  "description": "Hooke-Coulomb force graph",
+  "engines": {
+    "node": "8.1.4"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "4.16.2",
+    "serve-favicon": "2.4.5",
+    "serve-index": "1.9.1"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Ken.Rubin@whiterivercomputing.com",
+  "license": "ISC"
+}
