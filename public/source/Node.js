@@ -5,9 +5,9 @@
 "use strict";
 
 // Define universal constants:
-const HOOKE_CONSTANT = 0.001;
-const COULOMB_CONSTANT = 4000;
-const DRAG_CONSTANT = -0.01;
+const HOOKE_CONSTANT = 0.1;
+const COULOMB_CONSTANT = 7000;
+const DRAG_CONSTANT = -0.1;
 const ANIMATION_SPEED_CONSTANT = 10;
 
 class Node {
@@ -17,6 +17,7 @@ class Node {
 
         // Draw a circle.
         context.fillStyle = this.color;
+        context.strokeStyle = this.colorLink;
         context.beginPath();
         context.arc(this.position.x - nodeBasis.position.x,
             this.position.y - nodeBasis.position.y,
@@ -24,10 +25,44 @@ class Node {
             0,
             2 * Math.PI);
         context.fill();
+        context.stroke();
+    }
+
+    // Render the name to the context.
+    renderName(context, nodeBasis) {
+
+        // Draw text.
+        context.font = "30px arial";
+        context.textBaseline="middle";
+        context.textAlign="center";
+        context.fillStyle = this.colorTextContext;
+        context.strokeStyle = this.colorText;
+        context.fillText(this.name,
+            this.position.x - nodeBasis.position.x,
+            this.position.y - nodeBasis.position.y);
+        context.strokeText(this.name,
+            this.position.x - nodeBasis.position.x,
+            this.position.y - nodeBasis.position.y);
+    }
+
+    // Render the node to the context.
+    renderLinks(context, nodeBasis) {
+
+        // Draw a line betwixt this node and its hook children.
+        context.strokeStyle = this.colorLink;
+        this.hookeChildren.forEach((nodeChild) => {
+
+            context.beginPath();
+            context.moveTo(this.position.x - nodeBasis.position.x,
+                this.position.y - nodeBasis.position.y);
+            context.lineTo(nodeChild.position.x - nodeBasis.position.x,
+                nodeChild.position.y - nodeBasis.position.y);
+            context.stroke();
+        });
     }
 
     // Compute the net force between this node and all its configured children.
-    computeNetForce() {
+    computeNetForce(nodeBasis) {
 
         // Reset force each frame with a drag calculation.
         let objectForce = {
@@ -69,6 +104,25 @@ class Node {
             objectForce.x += dHookeX;
             objectForce.y += dHookeY;
         });
+
+        // If vertical.
+        if (this.vertical) {
+
+            const dXOffset = Math.sin(new Date().getTime() / 2000);
+
+            let dTheta = Math.atan2((nodeBasis.position.y - 200) - (this.position.y),
+                (nodeBasis.position.x - 30 * dXOffset) - this.position.x);
+
+            let dDistance = Math.sqrt(Math.pow((nodeBasis.position.y - 200) - this.position.y, 2) +
+                Math.pow((nodeBasis.position.x - 30 * dXOffset) - this.position.x, 2));
+
+            let dHookeMagnitude = HOOKE_CONSTANT * dDistance;
+            let dHookeX = dHookeMagnitude * Math.cos(dTheta);
+            let dHookeY = dHookeMagnitude * Math.sin(dTheta);
+
+            objectForce.x += dHookeX;
+            objectForce.y += dHookeY;
+        }
 
         // Store the net force with the node.
         this.force = {
@@ -132,6 +186,34 @@ class Node {
         };
     }
 
+    // Name.
+    get name() {
+
+        if (this.m_strName === undefined) {
+
+            this.m_strName = "";
+        }
+        return this.m_strName;
+    }
+    set name(strValue) {
+
+        this.m_strName = strValue;
+    }
+
+    // Vertical.
+    get vertical() {
+
+        if (this.m_bVertical === undefined) {
+
+            this.m_bVertical = false;
+        }
+        return this.m_bVertical;
+    }
+    set vertical(bValue) {
+
+        this.m_bVertical = bValue;
+    }
+
     // Color.
     get color() {
 
@@ -144,6 +226,48 @@ class Node {
     set color(strValue) {
 
         this.m_strColor = strValue;
+    }
+
+    // Color link.
+    get colorLink() {
+
+        if (this.m_strColorLink === undefined) {
+
+            this.m_strColorLink = "rgb(20,20,20,0.5)";
+        }
+        return this.m_strColorLink;
+    }
+    set colorLink(strValue) {
+
+        this.m_strColorLink = strValue;
+    }
+
+    // Color Text.
+    get colorText() {
+
+        if (this.m_strColorText === undefined) {
+
+            this.m_strColorText = "black";
+        }
+        return this.m_strColorText;
+    }
+    set colorText(strValue) {
+
+        this.m_strColorText = strValue;
+    }
+
+    // Color Text context.
+    get colorTextContext() {
+
+        if (this.m_strColorTextContext === undefined) {
+
+            this.m_strColorTextContext = "white";
+        }
+        return this.m_strColorTextContext;
+    }
+    set colorTextContext(strValue) {
+
+        this.m_strColorTextContext = strValue;
     }
 
     // Position.
