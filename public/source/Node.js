@@ -74,16 +74,24 @@ class Node {
         // Process Coulomb repulsion.
         this.coulombChildren.forEach((nodeChild) => {
 
+            // Get the angle between the two nodes, expressed in
+            // rad counterclockwise from horitontal to the right.
             let dTheta = Math.atan2(this.position.y - nodeChild.position.y,
                 this.position.x - nodeChild.position.x);
 
+            // Get the distance between the two nodes.
             let dDistance = Math.sqrt(Math.pow(nodeChild.position.y - this.position.y, 2) +
                 Math.pow(nodeChild.position.x - this.position.x, 2));
 
+            // F = (k * q1 * q2) / d^2.
             let dCoulombMagnitude = COULOMB_CONSTANT * this.charge * nodeChild.charge / Math.pow(dDistance, 2);
+
+            // Decompose the force vector, which is always
+            // directed against the line of sight direction.
             let dCoulombX = dCoulombMagnitude * Math.cos(dTheta);
             let dCoulombY = dCoulombMagnitude * Math.sin(dTheta);
 
+            // Accumulate additive force.
             objectForce.x += dCoulombX;
             objectForce.y += dCoulombY;
         });
@@ -91,16 +99,24 @@ class Node {
         // Now, calculate attractvie, Hooke force.
         this.hookeChildren.forEach((nodeChild) => {
 
+            // Get the angle between the two nodes, expressed in
+            // rad counterclockwise from horitontal to the right.
             let dTheta = Math.atan2(nodeChild.position.y - this.position.y,
                 nodeChild.position.x - this.position.x);
 
+            // Get the distance between the two nodes.
             let dDistance = Math.sqrt(Math.pow(nodeChild.position.y - this.position.y, 2) +
                 Math.pow(nodeChild.position.x - this.position.x, 2));
 
+            // F = k * d.
             let dHookeMagnitude = HOOKE_CONSTANT * dDistance;
+
+            // Decompose the force vector, which is always
+            // directed towards the line of sight direction.
             let dHookeX = dHookeMagnitude * Math.cos(dTheta);
             let dHookeY = dHookeMagnitude * Math.sin(dTheta);
 
+            // Accumulate additive force.
             objectForce.x += dHookeX;
             objectForce.y += dHookeY;
         });
@@ -108,6 +124,7 @@ class Node {
         // If vertical.
         if (this.vertical) {
 
+            // Define a vertically bound oscilation.
             const dXOffset = Math.sin(new Date().getTime() / 2000);
 
             let dTheta = Math.atan2((nodeBasis.position.y - 200) - (this.position.y),
@@ -422,5 +439,9 @@ class Node {
             this.m_arrayCoulombChildren = [];
         }
         return this.m_arrayCoulombChildren;
+    }
+    set coulombChildren(arrayValue) {
+
+        this.m_arrayCoulombChildren = arrayValue;
     }
 }
